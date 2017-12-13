@@ -44,14 +44,17 @@ printf "\n[-] Running npm install in the server bundle...\n\n"
 cd $APP_BUNDLE_DIR/bundle/programs/server/
 
 meteor npm install --production
-meteor npm dedupe
+printf "\n[-] Running streamline 1/2 [flatten] ...\n\n"
 meteor npm install flatten-packages
-./node_modules/flatten-packages/bin/flatten
+meteor node ./node_modules/flatten-packages/bin/flatten
 meteor npm uninstall flatten-packages
+printf "\n[-] Running streamline  2/2 [dedupe]...\n\n"
+meteor npm dedupe
+
+
 
 # # put the entrypoint script in WORKDIR
-# mv $BUILD_SCRIPTS_DIR/entrypoint.sh $APP_BUNDLE_DIR/bundle/entrypoint.sh
-# ls -la $APP_BUNDLE_DIR/bundle/
+mv $BUILD_SCRIPTS_DIR/entrypoint.sh $APP_BUNDLE_DIR/bundle/entrypoint.sh
 
 # change ownership of the app to the node user
-# chown -R node:node $APP_BUNDLE_DIR
+chown -R node:node $APP_BUNDLE_DIR

@@ -62,28 +62,9 @@ ONBUILD RUN $BUILD_SCRIPTS_DIR/install-node.sh
 ONBUILD RUN $BUILD_SCRIPTS_DIR/install-phantom.sh
 ONBUILD RUN $BUILD_SCRIPTS_DIR/install-graphicsmagick.sh
 ONBUILD RUN $BUILD_SCRIPTS_DIR/install-mongo.sh
-
-
-# setup a user to install and run meteor as
-ONBUILD ENV METEOR_USER meteor
-ONBUILD RUN echo N | apt-get install -y sudo
-ONBUILD RUN $BUILD_SCRIPTS_DIR/add-user.sh $METEOR_USER
-ONBUILD RUN echo "$METEOR_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-ONBUILD RUN chown -R $METEOR_USER $BUILD_SCRIPTS_DIR
-
-
 ONBUILD RUN $BUILD_SCRIPTS_DIR/install-meteor.sh
-# ONBUILD RUN su $METEOR_USER -m -c "sudo $BUILD_SCRIPTS_DIR/install-meteor.sh"
 ONBUILD RUN $BUILD_SCRIPTS_DIR/build-meteor.sh
-# ONBUILD RUN su $METEOR_USER -m -c "sudo $BUILD_SCRIPTS_DIR/build-meteor.sh"
-
 ONBUILD RUN $BUILD_SCRIPTS_DIR/post-build-cleanup.sh
-
-# put the entrypoint script in WORKDIR
-ONBUILD RUN mv $BUILD_SCRIPTS_DIR/entrypoint.sh $APP_BUNDLE_DIR/bundle/entrypoint.sh
-ONBUILD RUN ls -la $APP_BUNDLE_DIR/bundle/
-ONBUILD RUN chown -R node:node $APP_BUNDLE_DIR
-
 
 # Default values for Meteor environment variables
 ENV ROOT_URL http://localhost
