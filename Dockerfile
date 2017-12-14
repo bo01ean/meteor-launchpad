@@ -51,8 +51,6 @@ ONBUILD RUN if [ "$APT_GET_INSTALL" ]; then apt-get update && apt-get install -y
 
 # copy the app to the container
 ONBUILD COPY . $APP_SOURCE_DIR
-ONBUILD RUN ls -la $APP_SOURCE_DIR
-## ONBUILD COPY .meteor $APP_SOURCE_DIR/.meteor
 
 # install all dependencies, build app, clean up
 ONBUILD WORKDIR $APP_SOURCE_DIR
